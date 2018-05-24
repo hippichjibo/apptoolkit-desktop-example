@@ -328,7 +328,7 @@ public class App {
                 Object lockObj = new Object();
                 synchronized(lockObj) {
                     CommandLibrary commandLibrary = webSocketListener.getCommandLibrary();
-                    commandLibrary.say("hello world", new JiboOnCommandResponseListener(){
+                    commandLibrary.play.say("hello world", new JiboOnCommandResponseListener(){
                         @Override
                         public void onSuccess(String transactionID) {
                             // on success comes back from the websocket thread
