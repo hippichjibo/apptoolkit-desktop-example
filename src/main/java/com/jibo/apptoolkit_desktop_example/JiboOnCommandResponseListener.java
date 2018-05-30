@@ -2,7 +2,7 @@ package com.jibo.apptoolkit_desktop_example;
 
 import java.io.InputStream;
 import com.jibo.apptoolkit.protocol.model.EventMessage;
-import com.jibo.apptoolkit.protocol.CommandLibrary.OnCommandResponseListener;
+import com.jibo.apptoolkit.protocol.CommandRequester.OnCommandResponseListener;
 
 // an empty class which implements all the methods which could be triggered by
 // any command response.  

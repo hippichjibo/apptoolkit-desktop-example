@@ -2,7 +2,7 @@ package com.jibo.apptoolkit_desktop_example;
 
 import javax.net.ssl.SSLContext;
 
-import com.jibo.apptoolkit.protocol.CommandLibrary;
+import com.jibo.apptoolkit.protocol.CommandRequester;
 
 import okhttp3.Response;
 import okhttp3.WebSocket;
@@ -20,7 +20,7 @@ class JiboWebSocketListener extends WebSocketListener {
 	private String mIpAddress = null;
 
 	private WebSocket mWebSocket = null;
-	private CommandLibrary mCommandLibrary = null;
+	private CommandRequester mCommandRequester = null;
 	// a variable to signal when we have a valid session ready
 	private boolean mSessionReady = false;
 
@@ -37,8 +37,8 @@ class JiboWebSocketListener extends WebSocketListener {
 		mLockObj = new Object();
 	}
 
-	public CommandLibrary getCommandLibrary() {
-		return mCommandLibrary;
+	public CommandRequester getCommandRequester() {
+		return mCommandRequester;
 	}
 
 	// poll this method to signal when the session request command has come back as successful
@@ -60,27 +60,27 @@ class JiboWebSocketListener extends WebSocketListener {
 		}
 
 		System.out.println("Socket opened");
-		mCommandLibrary = new CommandLibrary(mSslContext, webSocket, mIpAddress, new JiboOnConnectionListener(){
+		mCommandRequester = new CommandRequester(mSslContext, webSocket, mIpAddress, new JiboOnConnectionListener(){
 			@Override
 			public void onConnected() {
 				System.out.println("Connected to robot");
 			}
 
 			@Override
-			public void onSessionStarted(CommandLibrary commandLibrary) {
+			public void onSessionStarted(CommandRequester CommandRequester) {
 				System.out.println("Session started");
 				mSessionReady = true;
 			}
 		});
 		// the websocket has connected. request a new session
-		mCommandLibrary.startSession();
+		mCommandRequester.getSession().start();
 	}
 
 	@Override
 	public void onMessage(WebSocket webSocket, String text) {
 		System.out.println("Receiving Message : " + text);
-		if(mCommandLibrary != null) {
-			mCommandLibrary.parseJiboResponse(text);
+		if(mCommandRequester != null) {
+			mCommandRequester.parseJiboResponse(text);
 		}
 	}
 

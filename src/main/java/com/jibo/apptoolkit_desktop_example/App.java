@@ -3,7 +3,7 @@ package com.jibo.apptoolkit_desktop_example;
 import com.jibo.apptoolkit_desktop_example.JiboWebSocketListener;
 import com.jibo.apptoolkit_desktop_example.ErrorInterceptor;
 import com.jibo.apptoolkit_desktop_example.JiboX509TrustManager;
-import com.jibo.apptoolkit.protocol.CommandLibrary;
+import com.jibo.apptoolkit.protocol.CommandRequester;
 import com.jibo.apptoolkit.protocol.utils.Commons;
 
 import java.net.URI;
@@ -301,7 +301,7 @@ public class App {
                 Runtime.getRuntime().addShutdownHook(new Thread() {
                     public void run() {
                         System.out.println("Closing websocket");
-                        webSocketListener.getCommandLibrary().disconnect();
+                        webSocketListener.getCommandRequester().getSession().end();
                         // a websocket close code of 1000 signals that this is a purposeful / non error close
                         webSocket.close(1000, "Application exiting");
 
@@ -327,8 +327,8 @@ public class App {
                 // send a hello world command which blocks on the current thread until we receive a success response back from the robot
                 Object lockObj = new Object();
                 synchronized(lockObj) {
-                    CommandLibrary commandLibrary = webSocketListener.getCommandLibrary();
-                    commandLibrary.say("hello world", new JiboOnCommandResponseListener(){
+                    CommandRequester CommandRequester = webSocketListener.getCommandRequester();
+                    CommandRequester.getExpression().say("hello world", new JiboOnCommandResponseListener(){
                         @Override
                         public void onSuccess(String transactionID) {
                             // on success comes back from the websocket thread
